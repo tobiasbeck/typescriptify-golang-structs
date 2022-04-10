@@ -81,6 +81,7 @@ type TypeScriptify struct {
 	Indent            string
 	CreateFromMethod  bool
 	CreateConstructor bool
+	ClassSuffix       string
 	BackupDir         string // If empty no backup
 	DontExport        bool
 	CreateInterface   bool
@@ -214,6 +215,11 @@ func (t *TypeScriptify) WithPrefix(p string) *TypeScriptify {
 
 func (t *TypeScriptify) WithSuffix(s string) *TypeScriptify {
 	t.Suffix = s
+	return t
+}
+
+func (t *TypeScriptify) WithClassSuffix(s string) *TypeScriptify {
+	t.ClassSuffix = " " + s
 	return t
 }
 
@@ -552,7 +558,7 @@ func (t *TypeScriptify) convertType(depth int, typeOf reflect.Type, customCode m
 	if t.CreateInterface {
 		result += fmt.Sprintf("interface %s {\n", entityName)
 	} else {
-		result += fmt.Sprintf("class %s {\n", entityName)
+		result += fmt.Sprintf("class %s%s {\n", entityName, t.ClassSuffix)
 	}
 	if !t.DontExport {
 		result = "export " + result
