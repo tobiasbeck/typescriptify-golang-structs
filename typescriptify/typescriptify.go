@@ -378,10 +378,10 @@ func loadCustomCode(fileName string) (map[string]string, error) {
 	lines := strings.Split(string(bytes), "\n")
 	for _, line := range lines {
 		trimmedLine := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmedLine, "//[") && strings.HasSuffix(trimmedLine, ":]") {
-			currentName = strings.Replace(strings.Replace(trimmedLine, "//[", "", -1), ":]", "", -1)
+		if strings.HasPrefix(trimmedLine, "// [") && strings.HasSuffix(trimmedLine, ":]") {
+			currentName = strings.Replace(strings.Replace(trimmedLine, "// [", "", -1), ":]", "", -1)
 			currentValue = ""
-		} else if trimmedLine == "//[end]" {
+		} else if trimmedLine == "// [end]" {
 			result[currentName] = strings.TrimRight(currentValue, " \t\r\n")
 			currentName = ""
 			currentValue = ""
@@ -701,7 +701,7 @@ func (t *TypeScriptify) convertType(depth int, typeOf reflect.Type, customCode m
 	if customCode != nil {
 		code := customCode[entityName]
 		if len(code) != 0 {
-			result += t.Indent + "//[" + entityName + ":]\n" + code + "\n\n" + t.Indent + "//[end]\n"
+			result += t.Indent + "// [" + entityName + ":]\n" + code + "\n\n" + t.Indent + "// [end]\n"
 		}
 	}
 
